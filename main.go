@@ -56,7 +56,7 @@ func main() {
 	// create pod
 	if err := c.CreatePod(pods.Items[0]); err != nil {
 		log.Error("create pod error: ", err)
-		//return
+		return
 	} else {
 		log.Info("succeed to create pod")
 	}
