@@ -61,7 +61,7 @@ func (c Client) CreatePod(podtpl v1.Pod) error {
 
 	pod := &v1.Pod{
 		TypeMeta:   podtpl.TypeMeta,
-		ObjectMeta: metav1.ObjectMeta{Name: "testpod", Namespace: "default", Labels: map[string]string{"name": "testpod"}},
+		ObjectMeta: metav1.ObjectMeta{Name: "testpod", Namespace: defaultnamespace, Labels: map[string]string{"name": "testpod"}},
 		Spec: v1.PodSpec{
 			Volumes:        podtpl.Spec.Volumes,
 			InitContainers: podtpl.Spec.InitContainers,
