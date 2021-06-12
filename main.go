@@ -11,6 +11,8 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
+//openssl req -new -key apiserver-host.key -subj "/CN=kube-apiserver," -out apiserver-host.csr
+// openssl x509 -req -in apiserver-host.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out apiserver-host.key.crt -days 365 -extfile apiserver-host.ext
 type Client struct {
 	Clientset *kubernetes.Clientset
 	Namespace string
@@ -39,11 +41,12 @@ func main() {
 	}
 
 	// 创建pod
-	podtpl, err := c.Clientset.CoreV1().Pods(c.Namespace).List(context.Background(), metav1.ListOptions{})
+	pods, err := c.Clientset.CoreV1().Pods(c.Namespace).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		log.Error(err)
 	}
-	if err := c.CreatePod(podtpl.Items[0]); err != nil {
+	log.Info(pods.Items)
+	if err := c.CreatePod(pods.Items[0]); err != nil {
 		log.Error(err)
 	}
 
