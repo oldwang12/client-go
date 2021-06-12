@@ -18,10 +18,15 @@ type Client struct {
 	Namespace string
 }
 
+const (
+	defaultnamespace  = "prj-install"
+	defaultkubeconfig = "kubeconfig"
+)
+
 func main() {
 	//kubelet.kubeconfig  是文件对应地址
-	kubeconfig := flag.String("kubeconfig", "kubeconfig", "(optional) absolute path to the kubeconfig file")
-	namespace := flag.String("namespace", "default", "(optional) which namespace pod create")
+	kubeconfig := flag.String("kubeconfig", defaultkubeconfig, "(optional) absolute path to the kubeconfig file")
+	namespace := flag.String("namespace", defaultnamespace, "(optional) which namespace pod create")
 	flag.Parse()
 
 	// 解析到config
