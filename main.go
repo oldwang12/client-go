@@ -19,6 +19,7 @@ type Client struct {
 }
 
 const (
+	defaultpodname    = "testpod"
 	defaultnamespace  = "prj-install"
 	defaultkubeconfig = "kubeconfig"
 )
@@ -46,15 +47,14 @@ func main() {
 	}
 
 	// List pod
-	pods, err := c.Clientset.CoreV1().Pods(c.Namespace).List(context.Background(), metav1.ListOptions{})
-	if err != nil {
+	if pods, err := c.ListPod(c.Namespace); err != nil {
 		log.Error("list pod error: ", err)
 		return
+	} else {
+		log.Info(c.Namespace, " 有 ", len(pods.Items), " 个pods")
 	}
-	log.Info(c.Namespace, " 有 ", len(pods.Items), " 个pods")
-
 	// create pod
-	if err := c.CreatePod(pods.Items[0]); err != nil {
+	if err := c.CreatePod(v1.Pod{}); err != nil {
 		log.Error("create pod error: ", err)
 		return
 	} else {
@@ -62,20 +62,28 @@ func main() {
 	}
 
 	// delete pod
-	if err = c.Clientset.CoreV1().Pods(c.Namespace).Delete(context.Background(), "testpod", metav1.DeleteOptions{}); err != nil {
+	if err := c.DeletePod(c.Namespace, defaultpodname); err != nil {
 		log.Error("delete pod error: ", err)
-		return
+
 	} else {
 		log.Info("succeed to delete pod")
 	}
+}
 
+func (c Client) ListPod(namespace string) (*v1.PodList, error) {
+	pods, err := c.Clientset.CoreV1().Pods(c.Namespace).List(context.Background(), metav1.ListOptions{})
+	if err != nil {
+		log.Error("list pod error: ", err)
+		return nil, err
+	}
+	return pods, nil
 }
 
 func (c Client) CreatePod(podtpl v1.Pod) error {
 
 	pod := &v1.Pod{
 		TypeMeta:   podtpl.TypeMeta,
-		ObjectMeta: metav1.ObjectMeta{Name: "testpod", Namespace: defaultnamespace, Labels: map[string]string{"name": "testpod"}},
+		ObjectMeta: metav1.ObjectMeta{Name: defaultpodname, Namespace: defaultnamespace, Labels: map[string]string{"name": defaultpodname}},
 		Spec: v1.PodSpec{
 			Volumes:        podtpl.Spec.Volumes,
 			InitContainers: podtpl.Spec.InitContainers,
@@ -103,6 +111,14 @@ func (c Client) CreatePod(podtpl v1.Pod) error {
 
 	_, err := c.Clientset.CoreV1().Pods(c.Namespace).Create(context.Background(), pod, op)
 	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c Client) DeletePod(namespace, podname string) error {
+	if err := c.Clientset.CoreV1().Pods(c.Namespace).Delete(context.Background(), podname, metav1.DeleteOptions{}); err != nil {
 		return err
 	}
 
