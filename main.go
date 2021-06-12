@@ -82,8 +82,8 @@ func (c Client) ListPod(namespace string) (*v1.PodList, error) {
 
 func (c Client) CreatePod(podtpl v1.Pod) error {
 	pod := &v1.Pod{
-		//TypeMeta:   podtpl.TypeMeta,
-		//ObjectMeta: metav1.ObjectMeta{Name: defaultpodname, Namespace: defaultnamespace, Labels: map[string]string{"name": defaultpodname}},
+		//TypeMeta: podtpl.TypeMeta,
+		ObjectMeta: metav1.ObjectMeta{Name: defaultpodname, Namespace: defaultnamespace, Labels: map[string]string{"name": defaultpodname}},
 		Spec: v1.PodSpec{
 			//	Volumes:        podtpl.Spec.Volumes,
 			//	InitContainers: podtpl.Spec.InitContainers,
