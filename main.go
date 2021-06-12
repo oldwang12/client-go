@@ -45,16 +45,21 @@ func main() {
 		Namespace: *namespace,
 	}
 
-	// 创建pod
+	// List pod
 	pods, err := c.Clientset.CoreV1().Pods(c.Namespace).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
-		log.Error(err)
+		log.Error("list pod error: ", err)
+		return
 	}
-	log.Info(pods.Items)
-	if err := c.CreatePod(pods.Items[0]); err != nil {
-		log.Error(err)
-	}
+	log.Info(c.Namespace, " 有 ", len(pods.Items), " 个pods")
 
+	// create pod
+	if err := c.CreatePod(pods.Items[0]); err != nil {
+		log.Error("create pod error: ", err)
+		return
+	} else {
+		log.Info("succeed to create pod")
+	}
 }
 
 func (c Client) CreatePod(podtpl v1.Pod) error {
