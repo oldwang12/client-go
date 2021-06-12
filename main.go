@@ -60,6 +60,15 @@ func main() {
 	} else {
 		log.Info("succeed to create pod")
 	}
+
+	// delete pod
+	if err = c.Clientset.CoreV1().Pods(c.Namespace).Delete(context.Background(), "testpod", metav1.DeleteOptions{}); err != nil {
+		log.Error("delete pod error: ", err)
+		return
+	} else {
+		log.Info("succeed to delete pod")
+	}
+
 }
 
 func (c Client) CreatePod(podtpl v1.Pod) error {
