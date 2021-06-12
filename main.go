@@ -51,7 +51,7 @@ func main() {
 		log.Error("list pod error: ", err)
 		return
 	} else {
-		log.Info(c.Namespace, " 有 ", len(pods.Items), " 个pods")
+		log.Info(c.Namespace, " have ", len(pods.Items), " pods")
 	}
 	// create pod
 	if err := c.CreatePod(v1.Pod{}); err != nil {
@@ -80,7 +80,6 @@ func (c Client) ListPod(namespace string) (*v1.PodList, error) {
 }
 
 func (c Client) CreatePod(podtpl v1.Pod) error {
-
 	pod := &v1.Pod{
 		TypeMeta:   podtpl.TypeMeta,
 		ObjectMeta: metav1.ObjectMeta{Name: defaultpodname, Namespace: defaultnamespace, Labels: map[string]string{"name": defaultpodname}},
@@ -89,17 +88,17 @@ func (c Client) CreatePod(podtpl v1.Pod) error {
 			InitContainers: podtpl.Spec.InitContainers,
 			Containers: []v1.Container{
 				{
-					Name:            "lee-test",
-					Image:           "nginx:latest",
-					ImagePullPolicy: podtpl.Spec.Containers[0].ImagePullPolicy,
+					Name:  "lee-test",
+					Image: "nginx:latest",
+					//ImagePullPolicy: podtpl.Spec.Containers[0].ImagePullPolicy,
 					//Command:         []string{""},
 					//Args:            []string{""},
-					Env: podtpl.Spec.Containers[0].Env,
+					//Env: podtpl.Spec.Containers[0].Env,
 					//Ports:           podtpl.Spec.Containers[0].Ports,
-					Resources: podtpl.Spec.Containers[0].Resources,
+					//Resources: podtpl.Spec.Containers[0].Resources,
 					//VolumeMounts:    podtpl.Spec.Containers[0].VolumeMounts,
-					SecurityContext: podtpl.Spec.Containers[0].SecurityContext,
-					Stdin:           podtpl.Spec.Containers[0].Stdin,
+					//SecurityContext: podtpl.Spec.Containers[0].SecurityContext,
+					//Stdin:           podtpl.Spec.Containers[0].Stdin,
 				},
 			},
 			TerminationGracePeriodSeconds: podtpl.Spec.TerminationGracePeriodSeconds,
