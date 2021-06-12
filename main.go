@@ -22,11 +22,10 @@ const (
 	defaultpodname    = "testpod"
 	deletepodname     = "testpod-delete"
 	defaultnamespace  = "prj-install"
-	defaultkubeconfig = "kubeconfig"
+	defaultkubeconfig = "kubeconfig" //是文件对应名称
 )
 
 func main() {
-	//kubelet.kubeconfig  是文件对应地址
 	kubeconfig := flag.String("kubeconfig", defaultkubeconfig, "(optional) absolute path to the kubeconfig file")
 	namespace := flag.String("namespace", defaultnamespace, "(optional) which namespace pod create")
 	flag.Parse()
