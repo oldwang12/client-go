@@ -61,10 +61,11 @@ func main() {
 		log.Info("succeed to create pod")
 	}
 
+	return
+
 	// delete pod
 	if err := c.DeletePod(c.Namespace, defaultpodname); err != nil {
 		log.Error("delete pod error: ", err)
-
 	} else {
 		log.Info("succeed to delete pod")
 	}
