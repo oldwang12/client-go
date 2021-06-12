@@ -20,6 +20,7 @@ type Client struct {
 
 const (
 	defaultpodname    = "testpod"
+	deletepodname     = "testpod-delete"
 	defaultnamespace  = "prj-install"
 	defaultkubeconfig = "kubeconfig"
 )
@@ -61,10 +62,8 @@ func main() {
 		log.Info("succeed to create pod")
 	}
 
-	return
-
 	// delete pod
-	if err := c.DeletePod(c.Namespace, defaultpodname); err != nil {
+	if err := c.DeletePod(c.Namespace, deletepodname); err != nil {
 		log.Error("delete pod error: ", err)
 	} else {
 		log.Info("succeed to delete pod")
@@ -80,6 +79,7 @@ func (c Client) ListPod(namespace string) (*v1.PodList, error) {
 	return pods, nil
 }
 
+// 创建pod时，无需补充所有参数。
 func (c Client) CreatePod(podtpl v1.Pod) error {
 	pod := &v1.Pod{
 		//TypeMeta: podtpl.TypeMeta,
@@ -121,6 +121,5 @@ func (c Client) DeletePod(namespace, podname string) error {
 	if err := c.Clientset.CoreV1().Pods(c.Namespace).Delete(context.Background(), podname, metav1.DeleteOptions{}); err != nil {
 		return err
 	}
-
 	return nil
 }
