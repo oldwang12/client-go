@@ -60,7 +60,7 @@ func (c Client) CreatePod(podtpl v1.Pod) error {
 			Containers: []v1.Container{
 				{
 					Name:            "lee-test",
-					Image:           "busybox:latest",
+					Image:           "nginx:latest",
 					ImagePullPolicy: podtpl.Spec.Containers[0].ImagePullPolicy,
 					Command:         podtpl.Spec.Containers[0].Command,
 					Args:            podtpl.Spec.Containers[0].Args,
